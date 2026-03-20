@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/emprestimos")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class EmprestimoController {
 
     private final EmprestimoRepository emprestimoRepository;
