@@ -1,6 +1,6 @@
-# 📚 Sistema de Gestão de Biblioteca - Full Stack
+# 📚 Sistema de Gestão de Biblioteca - Back-end
 
-Este projeto é uma aplicação Full Stack completa desenvolvida para a disciplina de Programação Orientada a Objetos (POO). O sistema permite o gerenciamento de acervo, clientes, controle de empréstimos em tempo real e um avançado sistema de suporte via tickets integrado com notificações por e-mail, utilizando persistência de dados em banco relacional.
+Este projeto é uma aplicação Full Stack completa em conjunto com o repositório " https://github.com/Bruno-lima-amaral/BiblioTech.git " desenvolvida para a disciplina de Programação Orientada a Objetos (POO). O sistema permite o gerenciamento de acervo, clientes, controle de empréstimos em tempo real e um avançado sistema de suporte via tickets integrado com notificações por e-mail, utilizando persistência de dados em banco relacional.
 
 ## 🚀 Funcionalidades Principais
 
