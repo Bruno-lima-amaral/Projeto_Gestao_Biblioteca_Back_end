@@ -1,7 +1,16 @@
+com\impacta\biblioteca\model\enums\Categoria.class
 com\impacta\biblioteca\model\Cliente.class
 com\impacta\biblioteca\model\Livro.class
+com\impacta\biblioteca\model\Emprestimo.class
+com\impacta\biblioteca\model\Ticket.class
+com\impacta\biblioteca\service\TicketEmailService.class
 com\impacta\biblioteca\controller\LivroController.class
 com\impacta\biblioteca\BibliotecaApplication.class
 com\impacta\biblioteca\controller\ClienteController.class
+com\impacta\biblioteca\repository\EmprestimoRepository.class
+com\impacta\biblioteca\controller\TicketController.class
+com\impacta\biblioteca\controller\EmprestimoController.class
+com\impacta\biblioteca\repository\TicketRepository.class
+com\impacta\biblioteca\model\enums\Prioridade.class
 com\impacta\biblioteca\repository\ClienteRepository.class
 com\impacta\biblioteca\repository\LivroRepository.class

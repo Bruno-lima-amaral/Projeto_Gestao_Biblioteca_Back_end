@@ -2,19 +2,30 @@ package com.impacta.biblioteca.service;
 
 import com.impacta.biblioteca.model.Ticket;
 import com.impacta.biblioteca.repository.TicketRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class TicketEmailService {
 
     private final TicketRepository ticketRepository;
-    private final JavaMailSender mailSender;
+    private final RestTemplate restTemplate;
+
+    @Value("${resend.api.key}")
+    private String resendApiKey;
+
+    @Value("${resend.from.email:BiblioTech <onboarding@resend.dev>}")
+    private String fromEmail;
+
+    public TicketEmailService(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+        this.restTemplate = new RestTemplate();
+    }
 
     public void enviarRelatorioTicketsAbertos(String emailDestino) {
         List<Ticket> ticketsAbertos = ticketRepository.findByStatus("ABERTO");
@@ -37,11 +48,25 @@ public class TicketEmailService {
             }
         }
 
-        SimpleMailMessage mensagem = new SimpleMailMessage();
-        mensagem.setTo(emailDestino);
-        mensagem.setSubject("Relatório de Tickets Abertos - BiblioTech");
-        mensagem.setText(corpo.toString());
+        // Enviar via Resend HTTP API (funciona no Railway sem bloqueio SMTP)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(resendApiKey);
 
-        mailSender.send(mensagem);
+        Map<String, Object> body = Map.of(
+                "from", fromEmail,
+                "to", List.of(emailDestino),
+                "subject", "Relatório de Tickets Abertos - BiblioTech",
+                "text", corpo.toString()
+        );
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                "https://api.resend.com/emails", request, String.class
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Erro ao enviar email via Resend: " + response.getBody());
+        }
     }
 }
