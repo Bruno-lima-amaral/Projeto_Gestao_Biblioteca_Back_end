@@ -1,61 +1,66 @@
-📚 Sistema de Gestão de Biblioteca - Full Stack
-Este projeto é uma aplicação Full Stack completa desenvolvida para a disciplina de Programação Orientada a Objetos (POO). O sistema permite o gerenciamento de acervo, clientes e o controle de empréstimos em tempo real, com persistência de dados em banco relacional.
+# 📚 Sistema de Gestão de Biblioteca - Full Stack
 
-🚀 Funcionalidades Principais
-Gestão de Acervo: CRUD completo de livros com controle de disponibilidade automática.
+Este projeto é uma aplicação Full Stack completa desenvolvida para a disciplina de Programação Orientada a Objetos (POO). O sistema permite o gerenciamento de acervo, clientes, controle de empréstimos em tempo real e um avançado sistema de suporte via tickets integrado com notificações por e-mail, utilizando persistência de dados em banco relacional.
 
-Gestão de Clientes: Cadastro e manutenção de usuários da biblioteca.
+## 🚀 Funcionalidades Principais
 
-Controle de Empréstimos: Registro de saídas com vínculo entre cliente e livro, alterando o status do acervo instantaneamente.
+- **Gestão de Acervo**: CRUD completo de livros com controle de disponibilidade automática.
+- **Gestão de Clientes**: Cadastro, edição, remoção e manutenção de usuários da biblioteca.
+- **Controle de Empréstimos**: Registro de saídas com vínculo entre o cliente e o livro, alterando o status do acervo instantaneamente em tempo real.
+- **Módulo de Suporte (Tickets)**:
+  - Criação e acompanhamento de tickets (Kanban interativo).
+  - Atualização automática de status (`ABERTO`, `EM_ANALISE`, `CONCLUIDO`) e níveis de prioridade.
+  - Sistema de interações/respostas dentro dos cards de cada ticket.
+  - **Relatórios por E-mail**: Geração de resumos de tickets pendentes/abertos, enviados automaticamente via e-mail utilizando a API Rest do Resend.
+- **Interface Moderna e Intuitiva**: Dashboard amplamente responsivo com suporte a Dark Mode integrado, construído em cima de Shadcn/UI.
 
-Interface Moderna: Dashboard responsivo com tema escuro (Dark Mode) utilizando Shadcn/UI.
+## 🛠️ Tecnologias e Dependências Utilizadas
 
-🛠️ Tecnologias Utilizadas
-Front-end
-Framework: Next.js 16 (App Router)
+### Front-end
+- **Framework Core**: Next.js (App Router)
+- **Estilização**: Tailwind CSS
+- **Biblioteca de Componentes UI**: Shadcn/UI (Radix UI)
+- **Ícones**: Lucide React
+- **Estado e Integração HTTP**: React Context API e chamadas Fetch nativas.
 
-Estilização: Tailwind CSS
+### Back-end (API REST)
+- **Linguagem Base**: Java 21
+- **Framework Principal**: Spring Boot 3.4.x
+- **Persistência e ORM**: Spring Data JPA (Hibernate)
+- **Driver de Banco**: MySQL Connector-J (MySQL 8.0+)
+- **Utilitários**: Lombok (redução de código verboso/boilerplate)
+- **Módulo de Comunicação**: Spring Boot Starter Mail & Integração com Resend HTTP API.
+- **Segurança**: Políticas rigorosas de CORS aplicadas para as requisições oriundas do Next.js.
 
-Componentes: Shadcn/UI & Lucide React
+## 🔧 Pré-requisitos e Instalação
 
-Estado/Comunicação: React Context API & Fetch API
+### 1. Preparando o Banco de Dados
+- Certifique-se de que o gerenciador de banco de dados **MySQL 8.0+** esteja executando em sua máquina (na porta 3306 padrão).
+- Crie um banco (schema) vazio correspondente ao configurado no back-end.
 
-Back-end (API REST)
-Linguagem: Java 21
+### 2. Configurando o Back-end
+1. Navegue até a raiz do projeto Spring (`api-biblioteca`).
+2. Abra e edite o arquivo `src/main/resources/application.properties` para alinhar suas credenciais do banco `spring.datasource.username` / `password` e, também, variáveis relativas aos e-mails.
+3. Para iniciar a API (geralmente executando na porta `8080`), utilize sua IDE favorita (como IntelliJ ou VS Code) na classe `BibliotecaApplication`, ou via terminal embutido com Maven:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
 
-Framework: Spring Boot 3.4
+### 3. Configurando o Front-end
+1. Acesse o diretório do front-end (`/biblioteca`).
+2. Realize a instalação de todos os pacotes das dependências do Node listados em `package.json`:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor Node de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
+4. A aplicação agora estará disponível no seu navegador em `http://localhost:3000`.
 
-ORM: Spring Data JPA (Hibernate)
+## 👨‍💻 Autores
 
-Segurança: Configuração de CORS para integração segura com o Front-end.
+- **Bruno Lima Amaral** - Estudante de Engenharia/TI - 4º Semestre
+- **Pedro Henrique Rodrigues dos Santos** - Estudante de Engenharia/TI - 4º Semestre
 
-Banco de Dados
-Tipo: Relacional (SQL)
-
-Engine: MySQL 8.0
-
-Modelagem: Relacionamentos @ManyToOne para controle de empréstimos.
-
-🔧 Como rodar o projeto localmente
-1. Configurar o Back-end
-   Certifique-se de ter o MySQL rodando.
-
-No arquivo src/main/resources/application.properties, ajuste as credenciais do seu banco.
-
-Execute a classe BibliotecaApplication via IntelliJ ou Maven.
-
-2. Configurar o Front-end
-   Acesse a pasta biblioteca.
-
-Instale as dependências: npm install.
-
-Inicie o servidor de desenvolvimento: npm run dev.
-
-Acesse http://localhost:3000.
-
-👨‍💻 Autores:
-
-Bruno Lima Amaral - Estudante de Engenharia/TI - 4º Semestre
-Pedro Henrique Rodrigues dos Santos - Estudante de Engenharia/TI - 4º Semestre
-
-"Desenvolvido em uma maratona épica de código, superando desafios de integração e infraestrutura."
+> *"Desenvolvido em uma maratona épica de código, superando desafios de integração e infraestrutura."*
