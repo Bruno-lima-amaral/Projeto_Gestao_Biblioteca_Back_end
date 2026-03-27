@@ -2,13 +2,15 @@ package com.impacta.biblioteca.controller;
 
 import com.impacta.biblioteca.model.Ticket;
 import com.impacta.biblioteca.repository.TicketRepository;
-import com.impacta.biblioteca.service.TicketEmailService; // <-- Importação do serviço de e-mail
+import com.impacta.biblioteca.service.TicketEmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tickets")
@@ -17,7 +19,7 @@ import java.util.List;
 public class TicketController {
 
     private final TicketRepository ticketRepository;
-    private final TicketEmailService ticketEmailService; // <-- Injetando o serviço
+    private final TicketEmailService ticketEmailService;
 
     // ─── GET — Listar todos os tickets ────────────────────────────
     @GetMapping
@@ -63,11 +65,16 @@ public class TicketController {
     }
 
     // ─── POST — Enviar Relatório por E-mail ─────────────────────────
-    @PostMapping("/relatorio")
-    public ResponseEntity<Void> enviarRelatorio(@RequestBody String emailDestino) {
-        // Limpa aspas caso o Front-end envie o e-mail em formato JSON/String "sujo"
-        String emailLimpo = emailDestino.replaceAll("^\"|\"$", "").trim();
-        ticketEmailService.enviarRelatorioTicketsAbertos(emailLimpo);
-        return ResponseEntity.ok().build();
+    @PostMapping(value = "/relatorio", consumes = {MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Map<String, String>> enviarRelatorio(@RequestBody String emailDestino) {
+        try {
+            // Limpa aspas caso o Front-end envie o e-mail em formato JSON/String "sujo"
+            String emailLimpo = emailDestino.replaceAll("^\"|\"$", "").trim();
+            ticketEmailService.enviarRelatorioTicketsAbertos(emailLimpo);
+            return ResponseEntity.ok(Map.of("mensagem", "Relatório enviado com sucesso para " + emailLimpo));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("erro", "Falha ao enviar relatório: " + e.getMessage()));
+        }
     }
 }

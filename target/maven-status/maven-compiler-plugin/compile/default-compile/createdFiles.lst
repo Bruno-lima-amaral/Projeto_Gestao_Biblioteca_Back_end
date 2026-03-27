@@ -1,7 +1,7 @@
 com\impacta\biblioteca\model\Cliente.class
 com\impacta\biblioteca\model\Livro.class
-com\impacta\biblioteca\repository\ClienteRepository.class
-com\impacta\biblioteca\repository\LivroRepository.class
 com\impacta\biblioteca\controller\LivroController.class
 com\impacta\biblioteca\BibliotecaApplication.class
 com\impacta\biblioteca\controller\ClienteController.class
+com\impacta\biblioteca\repository\ClienteRepository.class
+com\impacta\biblioteca\repository\LivroRepository.class
