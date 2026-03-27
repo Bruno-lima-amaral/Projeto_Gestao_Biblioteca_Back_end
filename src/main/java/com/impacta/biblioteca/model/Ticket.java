@@ -36,6 +36,9 @@ public class Ticket {
     @Column(nullable = false)
     private String status = "ABERTO";
 
+    @Column(columnDefinition = "TEXT")
+    private String resposta;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
 

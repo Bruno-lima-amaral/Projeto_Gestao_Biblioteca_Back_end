@@ -50,4 +50,19 @@ public class TicketController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    // ─── PATCH — Responder ticket ───────────────────────────────────
+
+    @PatchMapping("/{id}/resposta")
+    public ResponseEntity<Ticket> responderTicket(@PathVariable Long id, @RequestBody String resposta) {
+        return ticketRepository.findById(id)
+                .map(ticketExistente -> {
+                    String respostaLimpa = resposta.replaceAll("^\"|\"$", "").trim();
+                    ticketExistente.setResposta(respostaLimpa);
+                    ticketExistente.setStatus("CONCLUIDO");
+                    Ticket ticketSalvo = ticketRepository.save(ticketExistente);
+                    return ResponseEntity.ok(ticketSalvo);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
