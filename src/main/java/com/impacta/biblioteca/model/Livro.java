@@ -27,4 +27,8 @@ public class Livro {
 
     @Column(nullable = false)
     private Boolean disponivel = true;
+
+    @ManyToOne
+    @JoinColumn(name = "beneficiador_id")
+    private Beneficiador beneficiador;
 }

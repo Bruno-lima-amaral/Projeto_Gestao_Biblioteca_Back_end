@@ -29,7 +29,16 @@ public class Emprestimo {
     @Column(nullable = false)
     private LocalDate dataEmprestimo;
 
+    @Column(nullable = false)
+    private LocalDate dataPrevistaDevolucao;
+
     private LocalDate dataDevolucao;
+
+    @Column(nullable = false)
+    private Integer prazoDias = 7;
+
+    @Column(nullable = false)
+    private Integer renovacoesRealizadas = 0;
 
     @Column(nullable = false)
     private String status; // "ATIVO" ou "DEVOLVIDO"

@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "clientes")
+@Table(name = "beneficiadores")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cliente {
+public class Beneficiador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +20,8 @@ public class Cliente {
     private String nome;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String cnpj;
 
     @Column(nullable = false)
-    private String statusBloqueio = "ATIVO";
+    private String telefone;
 }

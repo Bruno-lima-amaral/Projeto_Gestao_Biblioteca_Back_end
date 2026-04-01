@@ -6,6 +6,7 @@ import com.impacta.biblioteca.model.Livro;
 import com.impacta.biblioteca.repository.ClienteRepository;
 import com.impacta.biblioteca.repository.EmprestimoRepository;
 import com.impacta.biblioteca.repository.LivroRepository;
+import com.impacta.biblioteca.service.EmprestimoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class EmprestimoController {
     private final EmprestimoRepository emprestimoRepository;
     private final LivroRepository livroRepository;
     private final ClienteRepository clienteRepository;
+    private final EmprestimoService emprestimoService;
 
     // ─── GET — Listar todos os empréstimos ──────────────────────────
 
@@ -72,31 +74,37 @@ public class EmprestimoController {
         emprestimo.setLivro(livro);
         emprestimo.setCliente(cliente);
         emprestimo.setDataEmprestimo(LocalDate.now());
+        emprestimo.setPrazoDias(7);
+        emprestimo.setDataPrevistaDevolucao(LocalDate.now().plusDays(7));
         emprestimo.setDataDevolucao(null);
+        emprestimo.setRenovacoesRealizadas(0);
         emprestimo.setStatus("ATIVO");
 
         Emprestimo salvo = emprestimoRepository.save(emprestimo);
         return ResponseEntity.status(HttpStatus.CREATED).body(salvo);
     }
 
+    // ─── PUT — Renovar empréstimo ───────────────────────────────────
+
+    @PutMapping("/{id}/renovar")
+    public ResponseEntity<?> renovar(@PathVariable Long id) {
+        try {
+            Emprestimo renovado = emprestimoService.renovarEmprestimo(id);
+            return ResponseEntity.ok(renovado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     // ─── PUT — Devolver empréstimo ──────────────────────────────────
 
     @PutMapping("/{id}/devolver")
     public ResponseEntity<?> devolver(@PathVariable Long id) {
-        return emprestimoRepository.findById(id)
-                .map(emprestimo -> {
-                    // Marca livro como disponível novamente
-                    Livro livro = emprestimo.getLivro();
-                    livro.setDisponivel(true);
-                    livroRepository.save(livro);
-
-                    // Atualiza o empréstimo
-                    emprestimo.setDataDevolucao(LocalDate.now());
-                    emprestimo.setStatus("DEVOLVIDO");
-                    Emprestimo atualizado = emprestimoRepository.save(emprestimo);
-
-                    return ResponseEntity.ok(atualizado);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            Emprestimo devolvido = emprestimoService.registrarDevolucao(id);
+            return ResponseEntity.ok(devolvido);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
