@@ -39,14 +39,19 @@ public class EmprestimoController {
     // Recebe { "livroId": 1, "clienteId": 2 }
 
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody Map<String, Long> body) {
-        Long livroId = body.get("livroId");
-        Long clienteId = body.get("clienteId");
+    public ResponseEntity<?> criar(@RequestBody Map<String, Object> body) {
+        // Jackson deserializa números JSON como Integer, não Long.
+        // Usar Number para converter de forma segura.
+        Number livroIdNum = (Number) body.get("livroId");
+        Number clienteIdNum = (Number) body.get("clienteId");
 
-        if (livroId == null || clienteId == null) {
+        if (livroIdNum == null || clienteIdNum == null) {
             return ResponseEntity.badRequest()
                     .body("livroId e clienteId são obrigatórios.");
         }
+
+        Long livroId = livroIdNum.longValue();
+        Long clienteId = clienteIdNum.longValue();
 
         // Busca o livro
         Livro livro = livroRepository.findById(livroId).orElse(null);
