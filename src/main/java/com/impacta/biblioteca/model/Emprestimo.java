@@ -26,20 +26,21 @@ public class Emprestimo {
     @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;
 
-    @Column(nullable = false)
+    @Column(name = "data_emprestimo", nullable = false)
     private LocalDate dataEmprestimo;
 
-    @Column(nullable = false)
+    @Column(name = "data_prevista_devolucao", nullable = false)
     private LocalDate dataPrevistaDevolucao;
 
+    @Column(name = "data_devolucao")
     private LocalDate dataDevolucao;
 
-    @Column(nullable = false)
+    @Column(name = "prazo_dias", nullable = false)
     private Integer prazoDias = 7;
 
-    @Column(nullable = false)
+    @Column(name = "renovacoes_realizadas", nullable = false)
     private Integer renovacoesRealizadas = 0;
 
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private String status; // "ATIVO" ou "DEVOLVIDO"
 }
