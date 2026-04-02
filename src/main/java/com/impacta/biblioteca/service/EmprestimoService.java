@@ -22,6 +22,42 @@ public class EmprestimoService {
     private final ClienteRepository clienteRepository;
 
     /**
+     * Cria um novo empréstimo.
+     *
+     * Todas as operações (buscar livro, buscar cliente, marcar indisponível,
+     * salvar empréstimo) rodam na mesma transação/sessão Hibernate.
+     */
+    @Transactional
+    public Emprestimo criarEmprestimo(Long livroId, Long clienteId) {
+        Livro livro = livroRepository.findById(livroId)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado."));
+
+        if (!livro.getDisponivel()) {
+            throw new RuntimeException("Livro já está emprestado.");
+        }
+
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
+
+        // Marca livro como indisponível (mesma sessão)
+        livro.setDisponivel(false);
+        livroRepository.save(livro);
+
+        // Cria o empréstimo
+        Emprestimo emprestimo = new Emprestimo();
+        emprestimo.setLivro(livro);
+        emprestimo.setCliente(cliente);
+        emprestimo.setDataEmprestimo(LocalDate.now());
+        emprestimo.setPrazoDias(7);
+        emprestimo.setDataPrevistaDevolucao(LocalDate.now().plusDays(7));
+        emprestimo.setDataDevolucao(null);
+        emprestimo.setRenovacoesRealizadas(0);
+        emprestimo.setStatus("ATIVO");
+
+        return emprestimoRepository.save(emprestimo);
+    }
+
+    /**
      * Renova um empréstimo existente.
      *
      * Regra 1: O cliente pode renovar o mesmo livro no máximo 2 vezes.
