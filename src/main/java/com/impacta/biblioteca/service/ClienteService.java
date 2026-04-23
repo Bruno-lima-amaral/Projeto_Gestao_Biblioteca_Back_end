@@ -29,6 +29,13 @@ public class ClienteService {
     // ─── Criar novo cliente ──────────────────────────────────────
 
     public Cliente criar(Cliente cliente) {
+        if (clienteRepository.existsByEmail(cliente.getEmail())) {
+            throw new IllegalArgumentException("Já existe um cliente cadastrado com este e-mail.");
+        }
+        if (clienteRepository.existsByCpf(cliente.getCpf())) {
+            throw new IllegalArgumentException("Já existe um cliente cadastrado com este CPF.");
+        }
+
         cliente.setId(null); // Garante que será um novo registro
         return clienteRepository.save(cliente);
     }
@@ -38,8 +45,19 @@ public class ClienteService {
     public Optional<Cliente> editar(Long id, Cliente clienteAtualizado) {
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
+                    if (!clienteExistente.getEmail().equals(clienteAtualizado.getEmail()) &&
+                            clienteRepository.existsByEmail(clienteAtualizado.getEmail())) {
+                        throw new IllegalArgumentException("Já existe um cliente cadastrado com este e-mail.");
+                    }
+                    if (!clienteExistente.getCpf().equals(clienteAtualizado.getCpf()) &&
+                            clienteRepository.existsByCpf(clienteAtualizado.getCpf())) {
+                        throw new IllegalArgumentException("Já existe um cliente cadastrado com este CPF.");
+                    }
+
                     clienteExistente.setNome(clienteAtualizado.getNome());
                     clienteExistente.setEmail(clienteAtualizado.getEmail());
+                    clienteExistente.setCpf(clienteAtualizado.getCpf());
+                    clienteExistente.setTelefone(clienteAtualizado.getTelefone());
                     clienteExistente.setSexo(clienteAtualizado.getSexo());
                     clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
                     return clienteRepository.save(clienteExistente);

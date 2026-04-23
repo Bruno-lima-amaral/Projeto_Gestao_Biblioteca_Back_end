@@ -29,6 +29,16 @@ public class FuncionarioService {
     // ─── Criar novo funcionário ──────────────────────────────────
 
     public Funcionario criar(Funcionario funcionario) {
+        if (funcionarioRepository.existsByEmail(funcionario.getEmail())) {
+            throw new IllegalArgumentException("Já existe um funcionário com este e-mail.");
+        }
+        if (funcionarioRepository.existsByCpf(funcionario.getCpf())) {
+            throw new IllegalArgumentException("Já existe um funcionário com este CPF.");
+        }
+        if (funcionarioRepository.existsByUsername(funcionario.getUsername())) {
+            throw new IllegalArgumentException("Já existe um funcionário com este nome de usuário (username).");
+        }
+
         funcionario.setId(null); // Garante que será um novo registro
         return funcionarioRepository.save(funcionario);
     }
@@ -38,6 +48,19 @@ public class FuncionarioService {
     public Optional<Funcionario> editar(Long id, Funcionario funcionarioAtualizado) {
         return funcionarioRepository.findById(id)
                 .map(funcionarioExistente -> {
+                    if (!funcionarioExistente.getEmail().equals(funcionarioAtualizado.getEmail()) &&
+                            funcionarioRepository.existsByEmail(funcionarioAtualizado.getEmail())) {
+                        throw new IllegalArgumentException("Já existe um funcionário com este e-mail.");
+                    }
+                    if (!funcionarioExistente.getCpf().equals(funcionarioAtualizado.getCpf()) &&
+                            funcionarioRepository.existsByCpf(funcionarioAtualizado.getCpf())) {
+                        throw new IllegalArgumentException("Já existe um funcionário com este CPF.");
+                    }
+                    if (!funcionarioExistente.getUsername().equals(funcionarioAtualizado.getUsername()) &&
+                            funcionarioRepository.existsByUsername(funcionarioAtualizado.getUsername())) {
+                        throw new IllegalArgumentException("Já existe um funcionário com este nome de usuário (username).");
+                    }
+
                     funcionarioExistente.setEmail(funcionarioAtualizado.getEmail());
                     funcionarioExistente.setCpf(funcionarioAtualizado.getCpf());
                     funcionarioExistente.setUsername(funcionarioAtualizado.getUsername());

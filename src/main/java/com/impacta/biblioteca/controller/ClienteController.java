@@ -37,18 +37,26 @@ public class ClienteController {
     // ─── POST — Criar novo cliente ───────────────────────────────
 
     @PostMapping
-    public ResponseEntity<Cliente> criar(@RequestBody Cliente cliente) {
-        Cliente clienteSalvo = clienteService.criar(cliente);
-        return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
+    public ResponseEntity<?> criar(@RequestBody Cliente cliente) {
+        try {
+            Cliente clienteSalvo = clienteService.criar(cliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // ─── PUT — Editar cliente por ID ─────────────────────────────
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cliente> editar(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
-        return clienteService.editar(id, clienteAtualizado)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
+        try {
+            return clienteService.editar(id, clienteAtualizado)
+                    .map(cliente -> ResponseEntity.ok((Object) cliente))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // ─── DELETE — Deletar cliente por ID ─────────────────────────

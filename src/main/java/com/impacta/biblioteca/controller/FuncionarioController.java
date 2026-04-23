@@ -37,18 +37,26 @@ public class FuncionarioController {
     // ─── POST — Criar novo funcionário ───────────────────────────
 
     @PostMapping
-    public ResponseEntity<Funcionario> criar(@RequestBody Funcionario funcionario) {
-        Funcionario funcionarioSalvo = funcionarioService.criar(funcionario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioSalvo);
+    public ResponseEntity<?> criar(@RequestBody Funcionario funcionario) {
+        try {
+            Funcionario funcionarioSalvo = funcionarioService.criar(funcionario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioSalvo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // ─── PUT — Editar funcionário por ID ─────────────────────────
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> editar(@PathVariable Long id, @RequestBody Funcionario funcionarioAtualizado) {
-        return funcionarioService.editar(id, funcionarioAtualizado)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> editar(@PathVariable Long id, @RequestBody Funcionario funcionarioAtualizado) {
+        try {
+            return funcionarioService.editar(id, funcionarioAtualizado)
+                    .map(funcionario -> ResponseEntity.ok((Object) funcionario))
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     // ─── DELETE — Deletar funcionário por ID ─────────────────────

@@ -24,6 +24,12 @@ public class Cliente {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
+    private String cpf;
+
+    @Column(nullable = false, unique = true)
+    private String telefone;
+
     @Column(nullable = false)
     private String statusBloqueio = "ATIVO";
 
