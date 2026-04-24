@@ -16,13 +16,6 @@ Este projeto é uma aplicação Full Stack completa em conjunto com o repositór
 
 ## 🛠️ Tecnologias e Dependências Utilizadas
 
-### Front-end
-- **Framework Core**: Next.js (App Router)
-- **Estilização**: Tailwind CSS
-- **Biblioteca de Componentes UI**: Shadcn/UI (Radix UI)
-- **Ícones**: Lucide React
-- **Estado e Integração HTTP**: React Context API e chamadas Fetch nativas.
-
 ### Back-end (API REST)
 - **Linguagem Base**: Java 21
 - **Framework Principal**: Spring Boot 3.4.x
@@ -39,28 +32,16 @@ Este projeto é uma aplicação Full Stack completa em conjunto com o repositór
 - Crie um banco (schema) vazio correspondente ao configurado no back-end.
 
 ### 2. Configurando o Back-end
-1. Navegue até a raiz do projeto Spring (`api-biblioteca`).
+1. Navegue até a raiz do projeto Spring (`Projeto_Gestao_Biblioteca_Back_end`).
 2. Abra e edite o arquivo `src/main/resources/application.properties` para alinhar suas credenciais do banco `spring.datasource.username` / `password` e, também, variáveis relativas aos e-mails.
 3. Para iniciar a API (geralmente executando na porta `8080`), utilize sua IDE favorita (como IntelliJ ou VS Code) na classe `BibliotecaApplication`, ou via terminal embutido com Maven:
    ```bash
-   ./mvnw spring-boot:run
+   ./mvnw spring-boot:run  || mvn spring-boot:run
    ```
-
-### 3. Configurando o Front-end
-1. Acesse o diretório do front-end (`/biblioteca`).
-2. Realize a instalação de todos os pacotes das dependências do Node listados em `package.json`:
-   ```bash
-   npm install
-   ```
-3. Inicie o servidor Node de desenvolvimento:
-   ```bash
-   npm run dev
-   ```
-4. A aplicação agora estará disponível no seu navegador em `http://localhost:3000`.
 
 ## 👨‍💻 Autores
 
-- **Bruno Lima Amaral** - Estudante de Engenharia/TI - 4º Semestre
-- **Pedro Henrique Rodrigues dos Santos** - Estudante de Engenharia/TI - 4º Semestre
+- **Bruno Lima Amaral** - Estudante de Ciencia da Computação/TI - 4º Semestre
+- **Pedro Henrique Rodrigues dos Santos** - Estudante de Ciencia da Computação/TI - 4º Semestre
 
 > *"Desenvolvido em uma maratona épica de código, superando desafios de integração e infraestrutura."*
